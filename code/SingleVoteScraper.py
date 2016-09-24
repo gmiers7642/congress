@@ -4,17 +4,6 @@ import os
 
 html = file('/Users/glenn/Zipfian/project/congress/data/view-source_clerk.house.gov_evs_2016_roll520.xml', 'r')
 
-def get_single_vote(soup, o_file):
-    # Get name-id, and sort-field from legislator tag
-    legislator_attrs = ['name-id', 'sort_field']
-    legislator_data = scrape_attrs(soup, "legislator", legislator_attrs)
-    # Get votes from <vote> tag
-    votes = scrape_tag_text(soup, 'vote')
-    # Make sure that legislator names match the specified file
-
-    # Append them to the specified file
-    pass
-
 def scrape_tag_text(soup, tag):
     output = []
     for node in soup.findAll(tag):
@@ -61,12 +50,13 @@ def create_vote_file(ip_file, op_file):
     with open(op_file, 'w') as o_file:
         o_file.write(header)
 
-    # if it's new, add issue, and all of the legislator name_ids to it
-    #with open(op_file) as f:
+def get_single_vote(soup):
+    return ','.join(scrape_tag_text(soup, 'vote') )
 
 if __name__ == '__main__':
-    #soup = pull_page('http://clerk.house.gov/evs/2016/roll520.xml')
+    soup = pull_page('http://clerk.house.gov/evs/2016/roll520.xml')
     #get_legislator_table(soup, '../data/legislators_house_114th_2nd.txt')
-    ip_file = '/Users/glenn/Zipfian/project/congress/data/legislators_house_114th_2nd.txt'
-    op_file = '/Users/glenn/Zipfian/project/congress/data/votes_house_114th_2nd.txt'
-    create_vote_file(ip_file, op_file)
+    #ip_file = '/Users/glenn/Zipfian/project/congress/data/legislators_house_114th_2nd.txt'
+    #op_file = '/Users/glenn/Zipfian/project/congress/data/votes_house_114th_2nd.txt'
+    #create_vote_file(ip_file, op_file)
+    print get_single_vote(soup)
